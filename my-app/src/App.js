@@ -1,31 +1,48 @@
 import React, {useState} from 'react';
-import Counter from './Components/Counter'
-import PostItem from './Components/PostItem'
+import MyButton from './Components/UI/button/MyButton';
+import MyInput from './Components/UI/input/MyInput';
 import PostList from './Components/PostList'
 import './Styles/App.css'
 
 
 function App() {
 
-  const [posts1, setPosts1] = useState([
-    {id: 1, title: 'JavaScript 1', body: 'Description'},
-    {id: 2, title: 'JavaScript 2', body: 'Description'},
-    {id: 3, title: 'JavaScript 3', body: 'Description'}
-  ])
+  const [posts, setPosts] = useState([]);
 
-  const [posts2, setPosts2] = useState([
-    {id: 1, title: 'Python 1', body: 'Description'},
-    {id: 2, title: 'Python 2', body: 'Description'},
-    {id: 3, title: 'Python 3', body: 'Description'}
-  ])
+  const [post, setPost] = useState({title: '', body: ''});
+  // const bodyInputRef = useRef();
 
+  const addNewPost = (e) => {
+    e.preventDefault();
+    setPosts([...posts, {...post, id: Date.now()}]);
+    setPost({title: '', body: ''})
+  }
 
   return (
     <div className="App">
-      <PostList posts={posts1} title = 'Posts about JS'/>
-      <PostList posts={posts2} title = 'Posts about Python'/>
+      <form>
 
-      <Counter/>
+        {/* Управляемый компонент */}
+        <MyInput 
+          value={post.title}
+          onChange={e => setPost({...post, title: e.target.value})}
+          type="text" 
+          placeholder="Название поста">
+        </MyInput>
+
+        {/* Неуправляемый компонент */}
+        <MyInput 
+          // ref={bodyInputRef}
+          value={post.body}
+          onChange={e => setPost({...post, body: e.target.value})}
+          type="text" 
+          placeholder="Описание поста">
+        </MyInput>
+
+        <MyButton onClick={addNewPost}>Создать пост</MyButton>
+
+      </form>
+      <PostList posts={posts} title="Posts about JS"/>
     </div>
   );
 }
